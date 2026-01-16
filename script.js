@@ -1,7 +1,7 @@
 // Luxacom Interior Store - JavaScript
 
 const ADMIN_PASSWORD = 'admin123'; // Admin password - change this to your desired password
-const API_URL = 'http://localhost:3000/api'; // Backend API URL
+const API_URL = '/api'; // Backend API URL - uses relative path for localhost and deployed servers
 
 class InteriorStore {
     constructor() {
