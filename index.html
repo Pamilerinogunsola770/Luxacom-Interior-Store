@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxacom Interior Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="Luxacom Logo .png" alt="Luxacom Interiors">
+            </div>
+            <nav class="nav">
+                <a href="#products" class="nav-link">Shop</a>
+                <a href="#blog" class="nav-link">Blog</a>
+                <a href="#order" class="nav-link">Order</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Admin Login Modal -->
+     <!-- the password is admin123 -->
+    <div id="adminLoginModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Login</h2>
+            <div class="form-group">
+                <label for="adminPassword">Enter Password:</label>
+                <input type="password" id="adminPassword" placeholder="Enter password" required>
+            </div>
+            <button id="adminLoginSubmitBtn" class="btn-primary">Login</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div id="adminPanel" class="modal hidden">
+        <div class="modal-content admin-panel-content">
+            <span class="close">&times;</span>
+            <h2>Admin Panel</h2>
+            
+            <!-- Tabs for Products and Blogs -->
+            <div class="admin-tabs">
+                <button class="admin-tab-btn active" data-tab="products">Manage Products</button>
+                <button class="admin-tab-btn" data-tab="blogs">Manage Blogs</button>
+            </div>
+
+            <!-- Products Management Tab -->
+            <div id="products-tab" class="admin-tab-content active">
+                <h3>Add New Product</h3>
+                <div class="form-group">
+                    <label for="productName">Product Name:</label>
+                    <input type="text" id="productName" placeholder="e.g., Modern Sofa">
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Description:</label>
+                    <textarea id="productDescription" placeholder="Product description" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price (₦ Naira):</label>
+                    <input type="number" id="productPrice" placeholder="e.g., 1079988" step="1">
+                </div>
+                <div class="form-group">
+                    <label for="productImage">Product Image:</label>
+                    <input type="file" id="productImage" accept="image/*">
+                    <small style="color: #666; display: block; margin-top: 5px;">Upload an image file (JPG, PNG, etc.)</small>
+                </div>
+                <button id="addProductBtn" class="btn-primary">Add Product</button>
+
+                <h3 style="margin-top: 30px;">Delete Product</h3>
+                <div id="productsList" class="items-list">
+                    <!-- Products list will be populated here -->
+                </div>
+            </div>
+
+            <!-- Blogs Management Tab -->
+            <div id="blogs-tab" class="admin-tab-content hidden">
+                <h3>Add New Blog Post</h3>
+                <div class="form-group">
+                    <label for="blogTitle">Blog Title:</label>
+                    <input type="text" id="blogTitle" placeholder="e.g., Interior Design Tips">
+                </div>
+                <div class="form-group">
+                    <label for="blogExcerpt">Blog Excerpt:</label>
+                    <textarea id="blogExcerpt" placeholder="Short description of the blog post" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="blogDate">Date (Optional):</label>
+                    <input type="date" id="blogDate">
+                </div>
+                <div class="form-group">
+                    <label for="blogImage">Blog Image:</label>
+                    <input type="file" id="blogImage" accept="image/*">
+                    <small style="color: #666; display: block; margin-top: 5px;">Upload an image file (JPG, PNG, etc.)</small>
+                </div>
+                <button id="addBlogBtn" class="btn-primary">Add Blog Post</button>
+
+                <h3 style="margin-top: 30px;">Delete Blog Post</h3>
+                <div id="blogsList" class="items-list">
+                    <!-- Blogs list will be populated here -->
+                </div>
+            </div>
+
+            <button id="adminLogoutBtn" class="btn-secondary">Logout</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Transform Your Space</h2>
+            <p>Discover premium interior design products for your home</p>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+        <div class="container">
+            <h2 class="section-title">Our Products</h2>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products infused by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="blog-section">
+        <div class="container">
+            <h2 class="section-title">Luxacom Blog & News</h2>
+            <div class="blog-grid" id="blogGrid">
+                <!-- Blog posts will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Summary Section -->
+    <section id="order" class="order-section">
+        <div class="container">
+            <div class="order-container">
+                <div class="order-summary">
+                    <h2>Order Summary</h2>
+                    <div class="order-items" id="orderItems">
+                        <p class="empty-order">No items selected</p>
+                    </div>
+                    <div class="order-total">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">$0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Delivery fee (5%):</span>
+                            <span id="tax">$0.00</span>
+                        </div>
+                        <div class="total-row total-amount">
+                            <span>Total:</span>
+                            <span id="total">$0.00</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerName">Your Name:</label>
+                        <input type="text" id="customerName" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerPhone">Phone Number:</label>
+                        <input type="tel" id="customerPhone" placeholder="Enter your phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerAddress">Delivery Address:</label>
+                        <textarea id="customerAddress" placeholder="Enter your delivery address" rows="3" required></textarea>
+                    </div>
+                    <button class="btn-whatsapp" id="sendOrderBtn">Send Order via WhatsApp</button>
+                    <button class="btn-clear-order" id="clearOrderBtn">Clear Order</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026<button style="background-color:black; color: white;" id="adminLoginBtn" class="nav-link admin-btn">Luxacom Interior Store</button>All rights reserved.</p>
+            <p>Contact: +2349057539937 | Email: luxacominteriors@gmail.com</p>
+            <p>Follow us on <br>
+                <a href="#" class="footer-link"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="footer-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="footer-link"><i class="fab fa-twitter"></i></a>
+            </p>
+
+            <p>Built by</p>
+            <a href="https://api.whatsapp.com/send?phone=2349116769934&text=Hello%20Marvelus%2C%20My%20name%20is%20___________________%20and%20I%20messaging%20you%20concerning%20___________________ " style="text-decoration: none;">Marvelus Pro</a>
+            
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
