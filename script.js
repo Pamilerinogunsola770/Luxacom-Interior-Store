@@ -7,7 +7,7 @@ class InteriorStore {
     constructor() {
         this.products = [];
         this.blogPosts = [];
-        this.whatsappNumber = '09116769934';
+        this.whatsappNumber = '09057539937';
         this.isAdminLoggedIn = false;
         this.init();
     }
@@ -608,7 +608,7 @@ class InteriorStore {
 
     updateTotals() {
         const subtotal = this.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
-        const tax = subtotal * 0.05;
+        const tax = subtotal * 0;
         const total = subtotal + tax;
 
         document.getElementById('subtotal').textContent = `₦${this.formatPrice(subtotal)}`;
@@ -653,7 +653,7 @@ class InteriorStore {
 
         // Calculate totals
         const subtotal = this.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
-        const tax = subtotal * 0.05;
+        const tax = subtotal * 0;
         const total = subtotal + tax;
 
         // Format message

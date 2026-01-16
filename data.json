@@ -4,56 +4,56 @@
       "id": 1,
       "name": "Modern Sofa",
       "description": "Comfortable and stylish modern sofa",
-      "price": 1079988,
+      "price": 500000,
       "image": "sofa.jfif"
     },
     {
       "id": 2,
       "name": "Dining Table Set",
       "description": "Elegant wooden dining table with chairs",
-      "price": 1559988,
+      "price": 1000000,
       "image": "dinning-table.jfif"
     },
     {
       "id": 3,
       "name": "Floor Lamp",
       "description": "Contemporary floor lamp with LED",
-      "price": 239988,
+      "price": 150000,
       "image": "floor-lamp.jfif"
     },
     {
       "id": 4,
       "name": "Wall Mirror",
       "description": "Large decorative wall mirror",
-      "price": 359988,
+      "price": 100000,
       "image": "wall-mirror.jfif"
     },
     {
       "id": 5,
       "name": "Throw Pillows",
       "description": "Set of 4 premium throw pillows",
-      "price": 179988,
+      "price": 120000,
       "image": "throw-pillow.jfif"
     },
     {
       "id": 6,
       "name": "Coffee Table",
       "description": "Modern glass coffee table",
-      "price": 539988,
+      "price": 220000,
       "image": "coffee-table.jfif"
     },
     {
       "id": 7,
       "name": "Wall Art",
       "description": "Abstract wall art canvas",
-      "price": 419988,
+      "price": 50000,
       "image": "wall-art.jfif"
     },
     {
       "id": 8,
       "name": "Desk Chair",
       "description": "Ergonomic office chair",
-      "price": 479988,
+      "price": 60000,
       "image": "desk-chair.jfif"
     },
     {

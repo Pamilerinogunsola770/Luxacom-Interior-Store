@@ -45,7 +45,7 @@ Done! The site is live locally.
 ## Using the Admin Panel
 
 1. Click the **"Admin Login"** button at the top right
-2. Enter the password:********
+2. Enter the password: `admin123`
 3. Now I can:
    - **Add New Products** - Enter the name, description, price, and upload an image
    - **Delete Products** - Just click the delete button on any product
@@ -105,4 +105,3 @@ Luxacom Interior Store/
 This project was really fun to build! I combined HTML, CSS, JavaScript, Node.js, and Express to create something I can actually use to manage my interior design store.
 
 Happy selling! 
-
