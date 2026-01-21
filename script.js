@@ -155,13 +155,16 @@ class InteriorStore {
                 // Add leading slash to make it an absolute path from server root
                 imageSrc = '/' + imageSrc;
             }
+
+            // Truncate excerpt to first line
+            const truncatedExcerpt = post.excerpt.split('\n')[0];
             
             blogCard.innerHTML = `
                 <div class="blog-image"><img src="${imageSrc}" alt="${post.title}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.src='/uploads/${post.image}'; this.onerror=null;"></div>
                 <div class="blog-content">
                     <div class="blog-date">${post.date}</div>
                     <h3 class="blog-title">${post.title}</h3>
-                    <p class="blog-excerpt">${post.excerpt}</p>
+                    <p class="blog-excerpt">${truncatedExcerpt}</p>
                     <button class="read-more-btn" data-blog-index="${index}">Read More</button>
                 </div>
             `;
@@ -316,6 +319,11 @@ class InteriorStore {
         // Add blog
         document.getElementById('addBlogBtn').addEventListener('click', () => {
             this.addNewBlog();
+        });
+
+        // Blog link management
+        document.getElementById('addBlogLinkBtn').addEventListener('click', () => {
+            this.addBlogLinkInput();
         });
 
         // Click outside modal to close
@@ -505,6 +513,16 @@ class InteriorStore {
             date = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
         }
 
+        // Collect blog links
+        const links = [];
+        document.querySelectorAll('.blog-link-input').forEach(linkInput => {
+            const title = linkInput.querySelector('.blog-link-title').value.trim();
+            const url = linkInput.querySelector('.blog-link-url').value.trim();
+            if (title && url) {
+                links.push({ title, url });
+            }
+        });
+
         try {
             // Convert image to Base64
             const base64Image = await this.fileToBase64(imageFile);
@@ -519,6 +537,7 @@ class InteriorStore {
                     date,
                     image: base64Image,
                     fileName: fileName,
+                    links: links.length > 0 ? links : undefined,
                     password: ADMIN_PASSWORD
                 })
             });
@@ -540,12 +559,51 @@ class InteriorStore {
             document.getElementById('blogExcerpt').value = '';
             document.getElementById('blogDate').value = '';
             document.getElementById('blogImage').value = '';
+            document.getElementById('blogLinksContainer').innerHTML = `
+                <div class="blog-link-input" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input type="text" class="blog-link-title" placeholder="Link Title (e.g., Portfolio)" style="flex: 1;">
+                    <input type="url" class="blog-link-url" placeholder="URL (e.g., https://...)" style="flex: 2;">
+                    <button type="button" class="btn-remove-link" style="padding: 8px 12px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Remove</button>
+                </div>
+            `;
+            this.setupBlogLinkRemoveListeners();
 
             alert('✅ Blog post added successfully!');
         } catch (error) {
             console.error('Error adding blog:', error);
             alert('❌ Error: ' + error.message);
         }
+    }
+
+    addBlogLinkInput() {
+        const container = document.getElementById('blogLinksContainer');
+        const linkInputDiv = document.createElement('div');
+        linkInputDiv.className = 'blog-link-input';
+        linkInputDiv.style.display = 'flex';
+        linkInputDiv.style.gap = '10px';
+        linkInputDiv.style.marginBottom = '10px';
+        
+        linkInputDiv.innerHTML = `
+            <input type="text" class="blog-link-title" placeholder="Link Title (e.g., Portfolio)" style="flex: 1;">
+            <input type="url" class="blog-link-url" placeholder="URL (e.g., https://...)" style="flex: 2;">
+            <button type="button" class="btn-remove-link" style="padding: 8px 12px; background-color: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Remove</button>
+        `;
+        
+        container.appendChild(linkInputDiv);
+        this.setupBlogLinkRemoveListeners();
+    }
+
+    setupBlogLinkRemoveListeners() {
+        document.querySelectorAll('.btn-remove-link').forEach(btn => {
+            btn.removeEventListener('click', this.removeBlogLink);
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const linkInput = e.target.closest('.blog-link-input');
+                if (linkInput) {
+                    linkInput.remove();
+                }
+            });
+        });
     }
 
     renderProductsList() {
