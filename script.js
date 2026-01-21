@@ -62,6 +62,7 @@ class InteriorStore {
             }
             const blogs = await response.json();
             this.blogPosts = blogs;
+            console.log('Blogs loaded:', this.blogPosts); // Debug log
             // Cache blogs to localStorage
             localStorage.setItem('luxacomBlogs', JSON.stringify(this.blogPosts));
         } catch (error) {
@@ -204,6 +205,9 @@ class InteriorStore {
         const post = this.blogPosts[index];
         if (!post) return;
 
+        console.log('Opening blog modal for post:', post); // Debug log
+        console.log('Links in post:', post.links); // Debug log
+
         const modal = document.getElementById('blogModal');
         const modalImage = document.getElementById('blogModalImage');
         const modalDate = document.getElementById('blogModalDate');
@@ -235,27 +239,45 @@ class InteriorStore {
         }
 
         // Display links if available
+        modalLinks.innerHTML = ''; // Clear previous links
+        
         if (post.links && Array.isArray(post.links) && post.links.length > 0) {
-            modalLinks.innerHTML = '<h4 style="margin-bottom: 10px;">Related Links:</h4>';
+            const heading = document.createElement('h4');
+            heading.textContent = 'Related Links:';
+            heading.style.marginBottom = '10px';
+            heading.style.color = '#000';
+            heading.style.fontWeight = '600';
+            modalLinks.appendChild(heading);
+            
             post.links.forEach(link => {
                 const linkElement = document.createElement('a');
                 linkElement.href = link.url;
                 linkElement.textContent = link.title;
-                linkElement.style.display = 'block';
-                linkElement.style.marginBottom = '8px';
+                linkElement.target = '_blank';
+                linkElement.rel = 'noopener noreferrer';
+                linkElement.style.display = 'inline-block';
+                linkElement.style.padding = '10px 15px';
+                linkElement.style.backgroundColor = '#f9f7f4';
                 linkElement.style.color = '#d4af37';
                 linkElement.style.textDecoration = 'none';
                 linkElement.style.fontWeight = '500';
+                linkElement.style.borderRadius = '4px';
+                linkElement.style.marginRight = '8px';
+                linkElement.style.marginBottom = '8px';
+                linkElement.style.transition = 'all 0.3s ease';
+                
                 linkElement.addEventListener('mouseover', () => {
-                    linkElement.style.textDecoration = 'underline';
+                    linkElement.style.backgroundColor = '#d4af37';
+                    linkElement.style.color = '#000';
                 });
+                
                 linkElement.addEventListener('mouseout', () => {
-                    linkElement.style.textDecoration = 'none';
+                    linkElement.style.backgroundColor = '#f9f7f4';
+                    linkElement.style.color = '#d4af37';
                 });
+                
                 modalLinks.appendChild(linkElement);
             });
-        } else {
-            modalLinks.innerHTML = '';
         }
 
         // Show modal
@@ -326,6 +348,9 @@ class InteriorStore {
             this.addBlogLinkInput();
         });
 
+        // Initialize blog link remove listeners
+        this.setupBlogLinkRemoveListeners();
+
         // Click outside modal to close
         window.addEventListener('click', (event) => {
             if (event.target === loginModal) {
@@ -388,6 +413,11 @@ class InteriorStore {
 
         // Add active class to clicked button
         event.target.classList.add('active');
+
+        // Re-initialize blog link listeners when switching to blogs tab
+        if (tabName === 'blogs') {
+            this.setupBlogLinkRemoveListeners();
+        }
     }
 
     async addNewProduct() {
