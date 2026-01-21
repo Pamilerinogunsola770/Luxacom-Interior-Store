@@ -11,6 +11,7 @@ class InteriorStore {
         this.isAdminLoggedIn = false;
         this.init();
     }
+    
 
     async init() {
         await this.loadProducts();
@@ -144,7 +145,7 @@ class InteriorStore {
             return;
         }
 
-        this.blogPosts.forEach(post => {
+        this.blogPosts.forEach((post, index) => {
             const blogCard = document.createElement('div');
             blogCard.className = 'blog-card';
             
@@ -161,10 +162,101 @@ class InteriorStore {
                     <div class="blog-date">${post.date}</div>
                     <h3 class="blog-title">${post.title}</h3>
                     <p class="blog-excerpt">${post.excerpt}</p>
+                    <button class="read-more-btn" data-blog-index="${index}">Read More</button>
                 </div>
             `;
             blogGrid.appendChild(blogCard);
         });
+
+        // Add click listeners to read more buttons
+        this.setupBlogModalListeners();
+    }
+
+    setupBlogModalListeners() {
+        const blogModal = document.getElementById('blogModal');
+        const closeBtn = blogModal.querySelector('.close');
+
+        // Close modal when X is clicked
+        closeBtn.addEventListener('click', () => {
+            blogModal.classList.add('hidden');
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === blogModal) {
+                blogModal.classList.add('hidden');
+            }
+        });
+
+        // Read more button listeners
+        document.querySelectorAll('.read-more-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const blogIndex = e.target.dataset.blogIndex;
+                this.openBlogModal(blogIndex);
+            });
+        });
+    }
+
+    openBlogModal(index) {
+        const post = this.blogPosts[index];
+        if (!post) return;
+
+        const modal = document.getElementById('blogModal');
+        const modalImage = document.getElementById('blogModalImage');
+        const modalDate = document.getElementById('blogModalDate');
+        const modalTitle = document.getElementById('blogModalTitle');
+        const modalExcerpt = document.getElementById('blogModalExcerpt');
+        const modalContent = document.getElementById('blogModalContent');
+        const modalLinks = document.getElementById('blogModalLinks');
+
+        // Set image
+        let imageSrc = post.image;
+        if (!imageSrc.startsWith('/') && !imageSrc.startsWith('http')) {
+            imageSrc = '/' + imageSrc;
+        }
+        modalImage.src = imageSrc;
+        modalImage.onerror = function() {
+            this.src = '/uploads/' + post.image;
+        };
+
+        // Set content
+        modalDate.textContent = post.date || 'No date';
+        modalTitle.textContent = post.title;
+        modalExcerpt.textContent = post.excerpt;
+        
+        // Display full content if available
+        if (post.content) {
+            modalContent.innerHTML = `<p>${post.content}</p>`;
+        } else {
+            modalContent.innerHTML = '';
+        }
+
+        // Display links if available
+        if (post.links && Array.isArray(post.links) && post.links.length > 0) {
+            modalLinks.innerHTML = '<h4 style="margin-bottom: 10px;">Related Links:</h4>';
+            post.links.forEach(link => {
+                const linkElement = document.createElement('a');
+                linkElement.href = link.url;
+                linkElement.textContent = link.title;
+                linkElement.style.display = 'block';
+                linkElement.style.marginBottom = '8px';
+                linkElement.style.color = '#d4af37';
+                linkElement.style.textDecoration = 'none';
+                linkElement.style.fontWeight = '500';
+                linkElement.addEventListener('mouseover', () => {
+                    linkElement.style.textDecoration = 'underline';
+                });
+                linkElement.addEventListener('mouseout', () => {
+                    linkElement.style.textDecoration = 'none';
+                });
+                modalLinks.appendChild(linkElement);
+            });
+        } else {
+            modalLinks.innerHTML = '';
+        }
+
+        // Show modal
+        modal.classList.remove('hidden');
     }
 
     setupEventListeners() {

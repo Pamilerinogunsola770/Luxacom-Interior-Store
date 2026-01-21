@@ -55,13 +55,6 @@
       "description": "Ergonomic office chair",
       "price": 60000,
       "image": "desk-chair.jfif"
-    },
-    {
-      "id": 9,
-      "name": "Vase",
-      "description": "Ornamental vase",
-      "price": 30000,
-      "image": "img_1768558638694.jfif"
     }
   ],
   "blogs": [

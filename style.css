@@ -342,6 +342,123 @@ a:hover{
     font-size: 14px;
     color: #666;
     line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.read-more-btn {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.read-more-btn:hover {
+    background-color: #d4a574;
+    transform: translateX(2px);
+}
+
+.read-more-btn:active {
+    transform: translateX(0);
+}
+
+/* Blog Modal Styles */
+.blog-modal-content {
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.blog-modal-header {
+    margin-bottom: 20px;
+}
+
+.blog-modal-body {
+    padding: 20px 0;
+}
+
+.blog-modal-date {
+    font-size: 12px;
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+#blogModalTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+#blogModalExcerpt {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+#blogModalContent {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+#blogModalContent p {
+    margin-bottom: 15px;
+}
+
+.blog-modal-links {
+    border-top: 2px solid var(--border-color);
+    padding-top: 15px;
+}
+
+.blog-modal-links h4 {
+    font-size: 16px;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.blog-modal-links a {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: var(--light-gray);
+    border-radius: 4px;
+    margin: 8px 8px 8px 0;
+    transition: background-color 0.3s ease;
+}
+
+.blog-modal-links a:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color) !important;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal:not(.hidden) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Order Section */
