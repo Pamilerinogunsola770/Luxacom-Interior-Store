@@ -31,11 +31,25 @@ class InteriorStore {
             const products = await response.json();
             this.products = products;
             this.products.forEach(p => p.quantity = 0);
+            // Cache products to localStorage
+            localStorage.setItem('luxacomProducts', JSON.stringify(this.products));
         } catch (error) {
             console.error('Error loading products:', error);
-            // Try to use fallback data from data.json
-            alert('Error loading products from server. Please make sure the server is running.');
-            this.products = [];
+            // Try to load from cache
+            const cachedProducts = localStorage.getItem('luxacomProducts');
+            if (cachedProducts) {
+                try {
+                    this.products = JSON.parse(cachedProducts);
+                    this.products.forEach(p => p.quantity = 0);
+                    console.log('Loaded products from cache');
+                } catch (parseError) {
+                    console.error('Error parsing cached products:', parseError);
+                    this.products = [];
+                }
+            } else {
+                console.error('No cached products available');
+                this.products = [];
+            }
         }
     }
 
@@ -47,10 +61,24 @@ class InteriorStore {
             }
             const blogs = await response.json();
             this.blogPosts = blogs;
+            // Cache blogs to localStorage
+            localStorage.setItem('luxacomBlogs', JSON.stringify(this.blogPosts));
         } catch (error) {
             console.error('Error loading blogs:', error);
-            alert('Error loading blogs from server. Please make sure the server is running.');
-            this.blogPosts = [];
+            // Try to load from cache
+            const cachedBlogs = localStorage.getItem('luxacomBlogs');
+            if (cachedBlogs) {
+                try {
+                    this.blogPosts = JSON.parse(cachedBlogs);
+                    console.log('Loaded blogs from cache');
+                } catch (parseError) {
+                    console.error('Error parsing cached blogs:', parseError);
+                    this.blogPosts = [];
+                }
+            } else {
+                console.error('No cached blogs available');
+                this.blogPosts = [];
+            }
         }
     }
 
@@ -627,27 +655,27 @@ class InteriorStore {
 
         // Validation
         if (!name) {
-            alert('❌ Please enter your name!');
+            this.showNotification('❌ Please enter your name!', 'error');
             return;
         }
         if (!phone) {
-            alert('❌ Please enter your phone number!');
+            this.showNotification('❌ Please enter your phone number!', 'error');
             return;
         }
         if (!address) {
-            alert('❌ Please enter your delivery address!');
+            this.showNotification('❌ Please enter your delivery address!', 'error');
             return;
         }
 
         const orderedProducts = this.products.filter(p => p.quantity > 0);
         if (orderedProducts.length === 0) {
-            alert('❌ Please add items to your order!');
+            this.showNotification('❌ Please add items to your order!', 'error');
             return;
         }
 
         // Validate WhatsApp number
         if (!this.whatsappNumber || this.whatsappNumber.length < 10) {
-            alert('❌ WhatsApp number not configured! Please contact the store.');
+            this.showNotification('❌ WhatsApp number not configured! Please contact the store.', 'error');
             return;
         }
 
@@ -691,11 +719,34 @@ class InteriorStore {
 
             // Clear form after sending
             this.clearOrder();
-            alert('✅ Opening WhatsApp... Order details sent!');
+            this.showNotification('✅ Order sent! Check your WhatsApp to confirm.', 'success');
         } catch (error) {
             console.error('Error sending order:', error);
-            alert('❌ Error sending order. Please try again.');
+            this.showNotification('❌ Error sending order. Please try again.', 'error');
         }
+    }
+
+    showNotification(message, type = 'success') {
+        // Remove existing notification if any
+        const existingNotification = document.querySelector('.notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        
+        // Add to body
+        document.body.appendChild(notification);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
     }
 
     clearOrder() {
@@ -721,6 +772,10 @@ class InteriorStore {
             customerAddress: document.getElementById('customerAddress').value
         };
         localStorage.setItem('luxacomOrder', JSON.stringify(orderData));
+        
+        // Also cache the full product and blog data
+        localStorage.setItem('luxacomProducts', JSON.stringify(this.products));
+        localStorage.setItem('luxacomBlogs', JSON.stringify(this.blogPosts));
     }
 
     loadFromLocalStorage() {
